@@ -42,11 +42,11 @@ void Player::Update() {
 	}
 
 	if (Input::GetInstance()->PushKey(DIK_LEFT)) {
-		worldTransform_.rotation_.y += RotationSpeed; // 左方向に回転
+		worldTransform_.rotation_.y -= RotationSpeed; // 左方向に回転
 	}
 	if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
 
-		worldTransform_.rotation_.y -= RotationSpeed; // 左方向に回転
+		worldTransform_.rotation_.y += RotationSpeed; // 左方向に回転
 	}
 
 	if (bullet_) {
@@ -87,10 +87,17 @@ void Player::Draw(ViewProjection& viewProjection) {
 
 void Player::Attack() {
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		Vector3 direction = {
-		    cos(worldTransform_.rotation_.y), // Y軸の回転に基づいて計算
-		    0.0f, sin(worldTransform_.rotation_.y)};
+		// プレイヤーのY軸の回転角度から発射方向を計算
+		float angle = worldTransform_.rotation_.y;
 
+		// X-Z平面での方向ベクトルを計算
+		Vector3 direction = {
+		    sin(angle), // X成分（Y軸回転に基づく）
+		    0.0f,       // Y成分（平面上なので0）
+		    cos(angle)  // Z成分（Y軸回転に基づく）
+		};
+
+		// 新しい弾を生成してリストに追加
 		PlayerBullet* newBullet = new PlayerBullet();
 		newBullet->Initialize(model_, worldTransform_.translation_, direction);
 		bullets_.push_back(newBullet);

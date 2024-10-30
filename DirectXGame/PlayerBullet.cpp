@@ -29,7 +29,7 @@ void PlayerBullet::Update() {
 	elapsedTime_ += 0.016f; // フレームレート60fps想定で約1フレームごとに更新
 
 
-	worldTransform_.UpdateMatrix(); 
+	//worldTransform_.UpdateMatrix(); 
 }
 bool PlayerBullet::IsExpired() const { return elapsedTime_ > lifespan_; }
 

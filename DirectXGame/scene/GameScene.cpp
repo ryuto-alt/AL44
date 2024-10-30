@@ -33,8 +33,10 @@ void GameScene::Initialize() {
 	player_->Initialize(model_, textureHandle_, playerPosition);
 
 	Vector3 direction = {
-	    cos(player_->GetRotation().y), // プレイヤーのY軸の回転に基づく発射方向
-	    0.0f, sin(player_->GetRotation().y)};
+	    cos(player_->GetRotation().y), // Y軸の回転に基づくX方向の成分
+	    0.0f,
+	    sin(player_->GetRotation().y) // Y軸の回転に基づくZ方向の成分
+	};
 	// PlayerBulletの初期化
 	playerBullet_ = new PlayerBullet(); // ここでplayerBullet_のメモリを確保
 	playerBullet_->Initialize(Bulletmodel_, playerPosition,direction);

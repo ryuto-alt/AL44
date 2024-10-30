@@ -50,8 +50,13 @@ void Player::Update() {
 	worldTransform_.translation_ .y+= move.y;
 	worldTransform_.translation_ .z+= move.z;
 	worldTransform_.UpdateMatrix();
+	// スペースキーが押されたら弾を発射
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 		Attack();
+	}
+	// 全ての弾を更新
+	for (auto bullet : bullets_) {
+		bullet->Update();
 	}
 }
 
@@ -60,22 +65,21 @@ void Player::Draw(ViewProjection& viewProjection) { model_->Draw(worldTransform_
 if (bullet_) {
 		bullet_->Draw(viewProjection);
 
+
 	}
+// 全ての弾を描画
+for (auto bullet : bullets_) {
+	bullet->Draw(viewProjection);
+}
 
 }
 
 void Player::Attack() {
-
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-	
-		// すでに弾が存在している場合、古い弾を解放
-		if (bullet_ != nullptr) {
-			delete bullet_;
-		}
-
-		// 新しい弾を生成してbullet_に保持
-		bullet_ = new PlayerBullet();
-		bullet_->Initialize(model_, worldTransform_.translation_);
+		// 新しい弾を生成してリストに追加
+		PlayerBullet* newBullet = new PlayerBullet();
+		newBullet->Initialize(model_, worldTransform_.translation_);
+		bullets_.push_back(newBullet);
 	}
 
 }

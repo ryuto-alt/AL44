@@ -27,6 +27,9 @@ private:
 
 	PlayerBullet* bullet_ = nullptr;
 
+	 // 弾を複数管理するためのベクター
+	std::vector<PlayerBullet*> bullets_;
+
 	// モデル
 	Model* model_ = nullptr;
 	// テクスチャハンドル

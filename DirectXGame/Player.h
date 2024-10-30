@@ -2,6 +2,8 @@
 #include <Model.h>
 #include <WorldTransform.h>
 
+#include <ViewProjection.h>
+#include <input.h>
 class Player {
 
 public:
@@ -17,8 +19,14 @@ public:
 private:
 	// ワールド返還データ
 	WorldTransform worldTransform_;
+	ViewProjection viewProjection_;
 	// モデル
 	Model* model_ = nullptr;
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
+
+	Input* input_=nullptr;
+	//speed
+	
+
 };

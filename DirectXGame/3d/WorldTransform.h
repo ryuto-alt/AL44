@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Matrix4x4.h"
+#include "Mymath.h"
 #include "Vector3.h"
 #include <d3d12.h>
 #include <type_traits>
@@ -51,6 +52,13 @@ public:
 	/// </summary>
 	/// <returns>定数バッファ</returns>
 	const Microsoft::WRL::ComPtr<ID3D12Resource>& GetConstBuffer() const { return constBuffer_; }
+
+	void UpdateMatrix() {
+		// スケール、回転、平行移動を合成して行列を計算する
+		matWorld_ = MakeAffineMatrix(scale_, rotation_, translation_);
+		// 定数バッファに転送する
+		TransferMatrix();
+	}
 
 private:
 	// 定数バッファ

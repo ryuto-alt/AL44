@@ -4,7 +4,6 @@
 
 #include "Mymath.h"
 
-
 void Player::Initialize(Model* model, uint32_t textureHandle, const Vector3& position) {
 	assert(model);
 	model_ = model;
@@ -22,13 +21,12 @@ void Player::Initialize(Model* model, uint32_t textureHandle, const Vector3& pos
 
 void Player::Update() {
 
-	
+	const float RotationSpeed = 0.05f; // 回転速度
 	const float CharaSpeed = 0.5f;
 	Vector3 move = {0, 0, 0};
 
 	// 行列を定数うバッファに転送
 	worldTransform_.TransferMatrix();
-	
 
 	if (Input::GetInstance()->PushKey(DIK_A)) {
 		move.x -= CharaSpeed;
@@ -43,43 +41,58 @@ void Player::Update() {
 		move.y -= CharaSpeed;
 	}
 
+	if (Input::GetInstance()->PushKey(DIK_LEFT)) {
+		worldTransform_.rotation_.y += RotationSpeed; // 左方向に回転
+	}
+	if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
+
+		worldTransform_.rotation_.y -= RotationSpeed; // 左方向に回転
+	}
+
 	if (bullet_) {
 		bullet_->Update();
 	}
-	worldTransform_.translation_ .x+= move.x;
-	worldTransform_.translation_ .y+= move.y;
-	worldTransform_.translation_ .z+= move.z;
+	worldTransform_.translation_.x += move.x;
+	worldTransform_.translation_.y += move.y;
+	worldTransform_.translation_.z += move.z;
 	worldTransform_.UpdateMatrix();
 	// スペースキーが押されたら弾を発射
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 		Attack();
 	}
-	// 全ての弾を更新
-	for (auto bullet : bullets_) {
-		bullet->Update();
+	
+	// 全ての弾を更新し、期限切れの弾を削除
+	for (auto it = bullets_.begin(); it != bullets_.end();) {
+		(*it)->Update();
+		if ((*it)->IsExpired()) {
+			delete *it;
+			it = bullets_.erase(it); // 弾が期限切れなら削除
+		} else {
+			++it;
+		}
 	}
 }
 
-void Player::Draw(ViewProjection& viewProjection) { model_->Draw(worldTransform_, viewProjection, textureHandle_);
+void Player::Draw(ViewProjection& viewProjection) {
+	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 
-if (bullet_) {
+	if (bullet_) {
 		bullet_->Draw(viewProjection);
-
-
 	}
-// 全ての弾を描画
-for (auto bullet : bullets_) {
-	bullet->Draw(viewProjection);
-}
-
+	// 全ての弾を描画
+	for (auto bullet : bullets_) {
+		bullet->Draw(viewProjection);
+	}
 }
 
 void Player::Attack() {
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		// 新しい弾を生成してリストに追加
+		Vector3 direction = {
+		    cos(worldTransform_.rotation_.y), // Y軸の回転に基づいて計算
+		    0.0f, sin(worldTransform_.rotation_.y)};
+
 		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initialize(model_, worldTransform_.translation_);
+		newBullet->Initialize(model_, worldTransform_.translation_, direction);
 		bullets_.push_back(newBullet);
 	}
-
 }

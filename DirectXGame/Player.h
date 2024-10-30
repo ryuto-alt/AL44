@@ -20,6 +20,9 @@ public:
 
 	void Attack();
 
+	 // プレイヤーの回転を取得するメソッド
+	const Vector3& GetRotation() const { return worldTransform_.rotation_; }
+
 private:
 	// ワールド返還データ
 	WorldTransform worldTransform_;

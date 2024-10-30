@@ -15,19 +15,33 @@ void GameScene::Initialize() {
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
-	// ファイルを指定してテクスチャを読み込む
+
+	// テクスチャの読み込み
 	textureHandle_ = TextureManager::Load("uvChecker.png");
-	// 3dモデルデータ
+	BullettextureHandle_ = TextureManager::Load("white1x1.png");
+
+	// モデルの生成
 	model_ = Model::Create();
+	Bulletmodel_ = Model::Create();
+
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
-	// 自キャラの生成
+
+	// プレイヤーの初期化
 	player_ = new Player();
-	// 自キャラの初期化
-	player_->Initialize(model_, textureHandle_);
+	Vector3 playerPosition = {0, 0, 0};
+	player_->Initialize(model_, textureHandle_, playerPosition);
+
+	// PlayerBulletの初期化
+	playerBullet_ = new PlayerBullet(); // ここでplayerBullet_のメモリを確保
+	playerBullet_->Initialize(Bulletmodel_, playerPosition);
 }
 
-void GameScene::Update() { player_->Update(); }
+void GameScene::Update() { player_->Update();
+	playerBullet_->Update();
+
+
+}
 
 void GameScene::Draw() {
 
@@ -54,6 +68,7 @@ void GameScene::Draw() {
 
 	// 自キャラ描画
 	player_->Draw(viewProjection_);
+	/*playerBullet_->Draw(viewProjection_);*/
 
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる

@@ -1,14 +1,16 @@
 #pragma once
 #include <Model.h>
 #include <WorldTransform.h>
-
+#include<PlayerBullet.h>
 #include <ViewProjection.h>
 #include <input.h>
 class Player {
 
 public:
 	/// 初期化
-	void Initialize(Model* model, uint32_t textureHandle);
+	
+
+	void Initialize(Model* model, uint32_t textureHandle, const Vector3& position);
 
 	/// 更新
 	void Update();
@@ -16,10 +18,15 @@ public:
 	// 描画
 	void Draw(ViewProjection& viewProjection);
 
+	void Attack();
+
 private:
 	// ワールド返還データ
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
+
+	PlayerBullet* bullet_ = nullptr;
+
 	// モデル
 	Model* model_ = nullptr;
 	// テクスチャハンドル

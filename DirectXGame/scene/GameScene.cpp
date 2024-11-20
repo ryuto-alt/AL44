@@ -32,6 +32,12 @@ void GameScene::Initialize() {
 	Vector3 playerPosition = {0, 0, 0};
 	player_->Initialize(model_, textureHandle_, playerPosition);
 
+	// 敵の生成
+	enemy_ = new Enemy();
+	// 敵の初期化
+	enemy_->Initialize(model_, worldTransform_.translation_);
+
+
 	Vector3 direction = {
 	    cos(player_->GetRotation().y), // Y軸の回転に基づくX方向の成分
 	    0.0f,
@@ -39,13 +45,14 @@ void GameScene::Initialize() {
 	};
 	// PlayerBulletの初期化
 	playerBullet_ = new PlayerBullet(); // ここでplayerBullet_のメモリを確保
-	playerBullet_->Initialize(Bulletmodel_, playerPosition,direction);
+	playerBullet_->Initialize(Bulletmodel_, playerPosition, direction);
 }
 
-void GameScene::Update() { player_->Update();
+void GameScene::Update() {
+	player_->Update();
 	playerBullet_->Update();
-
-
+	// 敵の更新
+	enemy_->Update();
 }
 
 void GameScene::Draw() {
@@ -74,7 +81,8 @@ void GameScene::Draw() {
 	// 自キャラ描画
 	player_->Draw(viewProjection_);
 	/*playerBullet_->Draw(viewProjection_);*/
-
+	// 敵の描画
+	enemy_->Draw(viewProjection_);
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>

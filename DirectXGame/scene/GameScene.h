@@ -9,6 +9,7 @@
 #include "PlayerBullet.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include "Enemy.h"
 
 /// <summary>
 /// ゲームシーン
@@ -45,6 +46,9 @@ public: // メンバ関数
 	Model* model_ = nullptr;
 	Model* Bulletmodel_ = nullptr;
 private: // メンバ変数
+	WorldTransform worldTransform_;
+	// ビュープロジェクション
+	ViewProjection viewProjection_;
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
@@ -55,11 +59,11 @@ private: // メンバ変数
 
 	// ワールドトランスフォーム
 	/*WorldTransform worldTransform_;*/
-
-	// ビュープロジェクション
-	ViewProjection viewProjection_;
 	Player* player_ = nullptr;
 	PlayerBullet* playerBullet_ = nullptr;
+
+	// 敵
+	Enemy* enemy_ = nullptr;
 
 	/// <summary>
 	/// ゲームシーン用

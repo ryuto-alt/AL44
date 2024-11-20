@@ -34,8 +34,9 @@ void GameScene::Initialize() {
 
 	// 敵の生成
 	enemy_ = new Enemy();
+	Vector3 EnemyPosition = {0, 0, 20};
 	// 敵の初期化
-	enemy_->Initialize(model_, worldTransform_.translation_);
+	enemy_->Initialize(model_, EnemyPosition);
 
 
 	Vector3 direction = {

@@ -1,26 +1,37 @@
 #include "EnemyBullet.h"
-#include <MyMath.h> // 必要に応じて線形補間関数を使用
-#include <cassert>
+#include <MyMath.h>
 #include <TextureManager.h>
+#include <cassert>
 
-void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector3& velocity) {
+void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector3& playerPosition) {
 	assert(model);
 	model_ = model;
 	textureHandle_ = TextureManager::Load("white1x1.png");
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
-	velocity_ = velocity;
+
+	// 初期速度をプレイヤー方向に設定
+	Vector3 direction = playerPosition - position;
+	direction.Normalize(direction);
+	velocity_ = direction * 0.05f; // 初期速度設定
+	followFrames_ = 30;            // 30フレームだけ追従する
 }
 
 void EnemyBullet::Update(const Vector3& playerPosition) {
-	// プレイヤーの位置に向かうベクトルを計算
-	Vector3 direction = playerPosition - worldTransform_.translation_;
-	direction.Normalize(direction);
+	// 追従処理（一定フレーム数のみ）
+	if (followFrames_ > 0) {
+		Vector3 directionToPlayer = playerPosition - worldTransform_.translation_;
+		directionToPlayer.Normalize(directionToPlayer);
 
-	// 速度を調整
-	velocity_ = direction * 0.5f; // 弾速を0.5に設定（調整可）
+		// 追従中は方向を更新
+	/*	velocity_ = directionToPlayer * 0.05f;*/
+		followFrames_--; // 追従フレームを減らす
+	}
+
+	// 弾を移動
 	worldTransform_.translation_ += velocity_;
 
+	// 寿命タイマーの更新
 	if (--deathTimer_ <= 0) {
 		isDead_ = true;
 	}

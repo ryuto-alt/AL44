@@ -1,6 +1,5 @@
 #include "GameScene.h"
 #include "TextureManager.h"
-
 #include <cassert>
 
 GameScene::GameScene() {}
@@ -27,7 +26,6 @@ void GameScene::Initialize() {
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
-	// プレイヤーの初期化
 	player_ = new Player();
 	Vector3 playerPosition = {0, 0, 0};
 	player_->Initialize(model_, textureHandle_, playerPosition);
@@ -53,7 +51,11 @@ void GameScene::Update() {
 	player_->Update();
 	playerBullet_->Update();
 	// 敵の更新
-	enemy_->Update();
+	// プレイヤーの位置を取得
+	Vector3 playerPosition = player_->GetPosition();
+
+	// 敵の更新にプレイヤーの位置を渡す
+	enemy_->Update(playerPosition);
 }
 
 void GameScene::Draw() {

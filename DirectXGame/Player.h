@@ -19,6 +19,7 @@ public:
 	void Draw(ViewProjection& viewProjection);
 
 	void Attack();
+	Vector3 GetPosition() const;
 
 	 // プレイヤーの回転を取得するメソッド
 	const Vector3& GetRotation() const { return worldTransform_.rotation_; }

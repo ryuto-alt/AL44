@@ -1,32 +1,30 @@
 #include "EnemyBullet.h"
+#include <MyMath.h> // 必要に応じて線形補間関数を使用
 #include <cassert>
 #include <TextureManager.h>
 
 void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector3& velocity) {
-	// NULLポインタチェック
 	assert(model);
-
 	model_ = model;
-	// テクスチャ読み込み
 	textureHandle_ = TextureManager::Load("white1x1.png");
-	// ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
-
 	worldTransform_.translation_ = position;
-
-	// 引数で受け取った速度をメンバ変数に代入
 	velocity_ = velocity;
 }
 
-void EnemyBullet::Update() {
-	// 座標を移動させる
-	worldTransform_.translation_.z -= 2.0f;
+void EnemyBullet::Update(const Vector3& playerPosition) {
+	// プレイヤーの位置に向かうベクトルを計算
+	Vector3 direction = playerPosition - worldTransform_.translation_;
+	direction.Normalize(direction);
+
+	// 速度を調整
+	velocity_ = direction * 0.5f; // 弾速を0.5に設定（調整可）
+	worldTransform_.translation_ += velocity_;
 
 	if (--deathTimer_ <= 0) {
 		isDead_ = true;
 	}
 
-	// 行列を更新
 	worldTransform_.UpdateMatrix();
 }
 

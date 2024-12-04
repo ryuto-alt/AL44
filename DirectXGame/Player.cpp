@@ -103,3 +103,5 @@ void Player::Attack() {
 		bullets_.push_back(newBullet);
 	}
 }
+
+Vector3 Player::GetPosition() const { return worldTransform_.translation_; }

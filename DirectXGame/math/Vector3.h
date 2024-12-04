@@ -1,5 +1,5 @@
 #pragma once
-
+#include<cmath>
 class Vector3 {
 public:
 	float x, y, z;
@@ -79,12 +79,27 @@ public:
 		return *this;
 	}
 
+
 	// 内積
 	float Dot(const Vector3& other) const { return x * other.x + y * other.y + z * other.z; }
 
 	// 外積
 	Vector3 Cross(const Vector3& other) const { return Vector3(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x); }
+
+	// 正規化
+	Vector3 Normalize(const Vector3& v) {
+		Vector3 result;
+		result.x = float(v.x / sqrt((v.x * v.x) + (v.y * v.y) + (v.z * v.z)));
+		result.y = float(v.y / sqrt((v.x * v.x) + (v.y * v.y) + (v.z * v.z)));
+		result.z = float(v.z / sqrt((v.x * v.x) + (v.y * v.y) + (v.z * v.z)));
+
+		return result;
+	}
+
+	
 };
 
 // スカラーと Vector3 の掛け算演算子オーバーロード
 inline Vector3 operator*(float scalar, const Vector3& v) { return Vector3(v.x * scalar, v.y * scalar, v.z * scalar); }
+
+

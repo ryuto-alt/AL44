@@ -6,6 +6,7 @@
 #include "Model.h"
 #include "Player.h"
 #include "Sprite.h"
+#include "Skydome.h"
 #include "PlayerBullet.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
@@ -65,6 +66,11 @@ private: // メンバ変数
 
 	// 敵
 	Enemy* enemy_ = nullptr;
+
+	// SkyDome
+	Skydome* skydome_ = nullptr;
+	Model* modelSkydome_ = nullptr;
+	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 
 	/// <summary>
 	/// ゲームシーン用

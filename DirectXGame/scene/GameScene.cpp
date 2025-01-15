@@ -7,6 +7,7 @@ GameScene::GameScene() {}
 GameScene::~GameScene() {
 	delete model_;
 	delete player_;
+	delete skydome_;
 }
 
 void GameScene::Initialize() {
@@ -25,6 +26,12 @@ void GameScene::Initialize() {
 
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
+
+	// SkyDome
+	skydome_ = new Skydome();
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+	skydome_->Initialize(modelSkydome_, &viewProjection_);
+
 
 	player_ = new Player();
 	Vector3 playerPosition = {0, 0, 0};
@@ -110,6 +117,8 @@ void GameScene::Draw() {
 	/*playerBullet_->Draw(viewProjection_);*/
 	// 敵の描画
 	enemy_->Draw(viewProjection_);
+
+	skydome_->Draw();
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>

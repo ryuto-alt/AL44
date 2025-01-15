@@ -11,6 +11,8 @@ public:
 	void Draw(const ViewProjection& viewProjection);
 	bool IsDead() const { return isDead_; }
 
+	 Vector3 GetPosition() const { return worldTransform_.translation_; }
+
 private:
 	WorldTransform worldTransform_;
 	Model* model_ = nullptr;

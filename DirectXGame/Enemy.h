@@ -18,6 +18,9 @@ public:
 	// 発射間隔
 	static const int kFIreInterval = 60;
 
+	// 弾丸のリスト
+	std::list<EnemyBullet*> bullets_;
+
 private:
 	void ApproachInitialize();
 
@@ -37,7 +40,4 @@ private:
 
 	// 発射タイマー
 	int fireTimer = 0;
-
-	// 弾丸のリスト
-	std::list<EnemyBullet*> bullets_;
 };

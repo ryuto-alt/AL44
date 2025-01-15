@@ -17,6 +17,7 @@ public:
 
 	Model* model_;
 
+	Vector3 GetPosition() const { return worldTransform_.translation_; }
 private:
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;

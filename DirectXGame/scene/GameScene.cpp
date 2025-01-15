@@ -56,6 +56,30 @@ void GameScene::Update() {
 
 	// 敵の更新にプレイヤーの位置を渡す
 	enemy_->Update(playerPosition);
+
+	// プレイヤーの弾とエネミーの弾の衝突判定
+	for (auto playerIt = player_->bullets_.begin(); playerIt != player_->bullets_.end();) {
+		bool playerBulletDeleted = false;
+
+		for (auto enemyIt = enemy_->bullets_.begin(); enemyIt != enemy_->bullets_.end();) {
+			if (CheckCollision((*playerIt)->GetPosition(), (*enemyIt)->GetPosition(), 0.5f, 0.5f)) {
+				delete *playerIt;
+				playerIt = player_->bullets_.erase(playerIt);
+
+				delete *enemyIt;
+				enemyIt = enemy_->bullets_.erase(enemyIt);
+
+				playerBulletDeleted = true;
+				break;
+			} else {
+				++enemyIt;
+			}
+		}
+
+		if (!playerBulletDeleted) {
+			++playerIt;
+		}
+	}
 }
 
 void GameScene::Draw() {
@@ -106,4 +130,10 @@ void GameScene::Draw() {
 	Sprite::PostDraw();
 
 #pragma endregion
+}
+
+bool GameScene::CheckCollision(const Vector3& pos1, const Vector3& pos2, float radius1, float radius2) {
+	float distanceSq = (pos1.x - pos2.x) * (pos1.x - pos2.x) + (pos1.y - pos2.y) * (pos1.y - pos2.y) + (pos1.z - pos2.z) * (pos1.z - pos2.z);
+	float combinedRadius = radius1 + radius2;
+	return distanceSq <= (combinedRadius * combinedRadius);
 }

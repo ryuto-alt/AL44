@@ -24,6 +24,8 @@ public:
 	 // プレイヤーの回転を取得するメソッド
 	const Vector3& GetRotation() const { return worldTransform_.rotation_; }
 
+	 // 弾を複数管理するためのベクター
+	std::vector<PlayerBullet*> bullets_;
 private:
 	// ワールド返還データ
 	WorldTransform worldTransform_;
@@ -31,8 +33,6 @@ private:
 
 	PlayerBullet* bullet_ = nullptr;
 
-	 // 弾を複数管理するためのベクター
-	std::vector<PlayerBullet*> bullets_;
 
 	// モデル
 	Model* model_ = nullptr;

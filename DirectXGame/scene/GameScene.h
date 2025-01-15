@@ -47,6 +47,7 @@ public: // メンバ関数
 	Model* Bulletmodel_ = nullptr;
 private: // メンバ変数
 	WorldTransform worldTransform_;
+	bool CheckCollision(const Vector3& pos1, const Vector3& pos2, float radius1, float radius2);
 	// ビュープロジェクション
 	ViewProjection viewProjection_;
 	DirectXCommon* dxCommon_ = nullptr;
